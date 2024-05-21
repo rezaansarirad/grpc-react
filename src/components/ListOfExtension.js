@@ -45,7 +45,9 @@ function ListOfExtension({ extensionList, filteredData }) {
           return (
             <li key={item.extension} className={itemClass}>
               <div>
-                <h3>Extension: {item.extension}</h3>
+                <h3>
+                  {item.name}-{item.extension}
+                </h3>
                 <p>Status: {item.status}</p>
                 {(item.extension === channelExtension ||
                   item.extension === destChannelExtension) && (

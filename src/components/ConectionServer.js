@@ -72,13 +72,8 @@ function ConectionServer() {
           console.error(error.message);
         } else {
           const jsonData = JSON.parse(response.getResult());
+          const extensionArray = jsonData;
 
-          const extensionArray = Object.entries(jsonData).map(
-            ([extension, status]) => ({
-              extension,
-              status,
-            })
-          );
           setExtensionList(extensionArray);
         }
       });
