@@ -1,0 +1,24 @@
+.card {
+  margin: 20px;
+  display: flex;
+  flex-wrap: wrap;
+
+  .card_body {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    width: fit-content;
+    ul {
+      padding-left: 5px;
+      list-style: none;
+      li {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+
+.waiting {
+  margin: 20px;
+  font-weight: bold;
+}
