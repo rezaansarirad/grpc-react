@@ -8,15 +8,16 @@ const client = new StreamServiceClient("http://officepbx.cfbtel.us:5233");
 function ConectionServer() {
   const [ExtensionList, setExtensionList] = useState(null);
   const [responseData, setResponseData] = useState(null);
-  // const [filteredData, setFilteredData] = useState(null);
   const streamRef = useRef(null);
+  const reconnectTimeoutRef = useRef(null);
+
   useEffect(() => {
     const connectStream = () => {
       const request = new Request();
       request.setId(1);
 
-      streamRef.current = client.fetchResponse(request);
-      const stream = streamRef.current;
+      const stream = client.fetchResponse(request);
+      streamRef.current = stream;
 
       const onData = (response) => {
         const jsonData = JSON.parse(response.getResult());
@@ -27,19 +28,18 @@ function ConectionServer() {
 
       const onEnd = () => {
         console.log("Finished");
-        setTimeout(connectStream, 1000);
+        reconnectTimeoutRef.current = setTimeout(connectStream, 1000);
       };
 
       const onError = (err) => {
         console.error("Error: ", err);
-
-        setTimeout(connectStream, 2000);
+        reconnectTimeoutRef.current = setTimeout(connectStream, 2000);
       };
 
       const onStatus = (status) => {
         console.log("Status: ", status);
         if (status?.code === 2) {
-          setTimeout(connectStream, 1000);
+          reconnectTimeoutRef.current = setTimeout(connectStream, 1000);
         }
       };
 
@@ -57,12 +57,6 @@ function ConectionServer() {
       };
     };
 
-    const streamConnectionTimeout = setTimeout(() => {
-      if (streamRef.current && streamRef.current.readyState === 0) {
-        clearTimeout(streamConnectionTimeout);
-        connectStream();
-      }
-    }, 5000);
     const getExtensionList = () => {
       const request = new Request();
       request.setId(1);
@@ -72,62 +66,30 @@ function ConectionServer() {
           console.error(error.message);
         } else {
           const jsonData = JSON.parse(response.getResult());
-          const extensionArray = jsonData;
+          const extensionArray = jsonData.sort((a, b) =>
+            a.extension.localeCompare(b.extension)
+          );
 
           setExtensionList(extensionArray);
         }
       });
-
-      return () => {};
     };
 
     getExtensionList();
     connectStream();
+
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.cancel();
+      }
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+      }
+    };
   }, []);
-
-  // useEffect(() => {}, []);
-  // const renderCard = () => {
-  //   if (!responseData) return null;
-
-  //   const { Event } = responseData;
-  //   if (
-  //     Event === "DeviceStateChange" &&
-  //     (Device === "PJSIP/GW1" ||
-  //       Device === "PJSIP/BW2" ||
-  //       Device === "PJSIP/BW1" ||
-  //       Device === "PJSIP/GW2")
-  //   ) {
-  //     return null;
-  //   }
-  //   let keysToDisplay = [];
-  //   if (Event === "DialEnd" || Event === "DialBegin") {
-  //     keysToDisplay = [
-  //       "Event",
-  //       "CallerIDName",
-  //       "CallerIDNum",
-  //       "Channel",
-  //       "ChannelStateDesc",
-  //       "DestCallerIDName",
-  //       "DestCallerIDNum",
-  //       "DestChannel",
-  //       "DialStatus",
-  //     ];
-  //   } else {
-  //     return null;
-  //   }
-  //   const filtered = keysToDisplay.reduce((acc, key) => {
-  //     if (responseData.hasOwnProperty(key)) {
-  //       acc[key] = responseData[key];
-  //     }
-  //     return acc;
-  //   }, {});
-
-  //   setFilteredData(filtered);
-  // };
 
   return (
     <div>
-      {/* {renderCard()} */}
       {!ExtensionList && (
         <div className={styles.waiting}>waiting for fetch...</div>
       )}

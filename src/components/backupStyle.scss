@@ -1,0 +1,90 @@
+.card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  h4 {
+    margin: 20px;
+    font-weight: bold;
+  }
+  ul {
+    margin: 20px;
+    padding-left: 5px;
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    li {
+      padding: 4px;
+      border-radius: 8px;
+      h3,
+      p {
+        font-size: 13px;
+      }
+    }
+  }
+}
+.waiting {
+  margin: 20px;
+  font-weight: bold;
+}
+.listItem {
+  border: 1px solid gray;
+  padding: 10px;
+  margin: 5px;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.5s ease-in-out;
+}
+
+.disabled {
+  opacity: 0.5;
+}
+
+.notInUse {
+  background-color: #00b894;
+  color: #fff;
+  border: 1px solid #00b894;
+}
+
+.changing {
+  background-color: yellow;
+}
+
+.highlight {
+  background-color: orange !important;
+}
+
+.iconHolder {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  .callIcon {
+    width: 15px;
+    height: 15px;
+    animation: shake 0.4s ease-in-out;
+    animation-iteration-count: 4;
+  }
+  span {
+    font-size: 12px;
+  }
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  50% {
+    transform: translateX(2px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}

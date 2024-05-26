@@ -1,78 +1,99 @@
-import React, { memo } from "react";
+import React, { useState, useEffect, memo } from "react";
 import styles from "./ListOfExtension.module.scss";
 
 function ListOfExtension({ extensionList, filteredData }) {
-  console.log(filteredData, "filteredData");
+  const [updatedExtensionList, setUpdatedExtensionList] =
+    useState(extensionList);
 
-  let channelExtension = null;
-  let destChannelExtension = null;
+  useEffect(() => {
+    if (filteredData) {
+      console.log(filteredData, "filteredData");
+      const {
+        Event,
+        Device,
+        State,
+        Channel,
+        DestChannel,
+        DialStatus,
+        CallerIDName,
+        DestCallerIDName,
+      } = filteredData;
 
-  if (
-    filteredData &&
-    filteredData.Event !== "DeviceStateChange" &&
-    filteredData.Event !== "DialState"
-  ) {
-    const { Channel, DestChannel } = filteredData;
+      if (Event === "DeviceStateChange" && Device) {
+        const ChannelExtension = Device.split("/")[1];
 
-    if (Channel) {
-      channelExtension = Channel.split("/")[1].split("-")[0];
+        setUpdatedExtensionList((prevList) =>
+          prevList.map((item) => {
+            if (item.extension === ChannelExtension) {
+              if (State === "NOT_INUSE") {
+                return { ...item, status: "Not_in_use" };
+              } else {
+                return { ...item, status: State };
+              }
+            }
+            return item;
+          })
+        );
+      }
+
+      if (Event === "DialEnd" && DialStatus === "ANSWER") {
+        let Extension1, Extension2;
+
+        if (Channel) {
+          Extension1 = Channel.split("/")[1].split("-")[0];
+        }
+        if (DestChannel) {
+          Extension2 = DestChannel.split("/")[1].split("-")[0];
+        }
+
+        if (Extension1 || Extension2) {
+          setUpdatedExtensionList((prevList) =>
+            prevList.map((item) => {
+              if (item.extension === Extension1) {
+                return {
+                  ...item,
+                  status: "IN_CALL",
+                  callWith: DestCallerIDName,
+                };
+              } else if (item.extension === Extension2) {
+                return { ...item, status: "IN_CALL", callWith: CallerIDName };
+              }
+              return item;
+            })
+          );
+        }
+      }
     }
-    if (DestChannel) {
-      destChannelExtension = DestChannel.split("/")[1].split("-")[0];
-    }
-  }
+  }, [filteredData]);
 
   return (
     <div className={styles.card}>
       <h4>Extension List:</h4>
       <ul>
-        {extensionList.map((item) => {
-          let itemClass = styles.listItem;
+        {updatedExtensionList.map((item) => {
+          let itemClass = "";
 
           if (item.status === "Unavailable") {
-            itemClass += ` ${styles.disabled}`;
+            itemClass = styles.unavailable;
           } else if (item.status === "Not_in_use") {
-            itemClass += ` ${styles.notInUse}`;
-          }
-
-          if (
-            item.extension === channelExtension ||
-            item.extension === destChannelExtension
-          ) {
-            itemClass += ` ${styles.highlight}`;
+            itemClass = styles.notInUse;
+          } else if (item.status === "INUSE") {
+            itemClass = styles.inUse;
+          } else if (item.status === "RINGING") {
+            itemClass = styles.ringing;
+          } else if (item.status === "IN_CALL") {
+            itemClass = styles.inCall;
           }
 
           return (
             <li key={item.extension} className={itemClass}>
-              <div>
-                <h3>
-                  {item.name}-{item.extension}
-                </h3>
-                <p>Status: {item.status}</p>
-                {(item.extension === channelExtension ||
-                  item.extension === destChannelExtension) && (
-                  <div className={styles.iconHolder}>
-                    <img src="/call.svg" alt="Call Icon" />
-                    {item.extension === channelExtension && (
-                      <span>{filteredData.DestCallerIDName}</span>
-                    )}
-                    {item.extension === destChannelExtension && (
-                      <span>{filteredData.DestConnectedLineName}</span>
-                    )}
-                  </div>
-                )}
-              </div>
-              {item.extension === channelExtension &&
-                filteredData.ChannelStateDesc === "Ring" && (
-                  <div className={styles.iconHolder}>
-                    <img
-                      src="/call.svg"
-                      className={styles.callIcon}
-                      alt="Call Icon"
-                    />
-                    <span> Ring ...</span>
-                  </div>
-                )}
+              <h3>
+                {item.name} - {item.extension}
+              </h3>
+              <p>Status: {item.status}</p>
+              {item.status === "IN_CALL" && item.callWith && (
+                <p>Call with: {item.callWith}</p>
+              )}
             </li>
           );
         })}
