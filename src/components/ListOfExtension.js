@@ -68,7 +68,6 @@ function ListOfExtension({ extensionList, filteredData }) {
 
   return (
     <div className={styles.card}>
-      <h4>Extension List:</h4>
       <ul>
         {updatedExtensionList.map((item) => {
           let itemClass = "";
@@ -87,9 +86,8 @@ function ListOfExtension({ extensionList, filteredData }) {
 
           return (
             <li key={item.extension} className={itemClass}>
-              <h3>
-                {item.name} - {item.extension}
-              </h3>
+              <span className={styles.extension}>{item.extension}</span>
+              <h3>{item.name}</h3>
               <p>Status: {item.status}</p>
               {item.status === "IN_CALL" && item.callWith && (
                 <p>Call with: {item.callWith}</p>

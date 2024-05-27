@@ -2,9 +2,20 @@
   background-color: #fff;
   height: 56px;
   display: flex;
-  img {
+  justify-content: space-between;
+
+  padding-inline: 28px;
+  .logo {
     width: 120px;
-    padding-block: 16px;
-    padding-left: 28px;
+  }
+  .icon_holder {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    span {
+      gap: 10px;
+      color: #1d1e3a;
+      font-size: 13px;
+    }
   }
 }
