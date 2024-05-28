@@ -89,7 +89,7 @@ function ConectionServer() {
   }, []);
 
   return (
-    <div>
+    <>
       {!ExtensionList && (
         <div className={styles.waiting}>waiting for fetch...</div>
       )}
@@ -100,7 +100,7 @@ function ConectionServer() {
           filteredData={responseData}
         />
       )}
-    </div>
+    </>
   );
 }
 

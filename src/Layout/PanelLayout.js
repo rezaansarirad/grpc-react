@@ -1,43 +1,74 @@
-import React from "react";
-import styles from "./index.module.scss";
+import React, { useState } from "react";
+import styles from "./PanelLayout.module.scss";
 function PanelLayout({ children }) {
+  const [activeList, setActiveList] = useState("Queues");
   return (
     <div className={styles.main}>
       <div className={styles.sidebar}>
         <ul>
-          <li>
-            <img src="/icons/sidebar/dashboard.svg" alt="1" />
+          <li
+            className={`${activeList === "Queues" ? styles.activeItem : ""}`}
+            onClick={() => setActiveList("Queues")}
+          >
+            <h4>Queues</h4>
           </li>
-          <li>
-            <img src="/icons/sidebar/call_out.svg" alt="2" />
+          <li
+            className={`${
+              activeList === "Queue Call" ? styles.activeItem : ""
+            }`}
+            onClick={() => setActiveList("Queue Call")}
+          >
+            <h4>Queue Call</h4>
           </li>
-          <li>
-            <img src="/icons/sidebar/call_to_call.svg" alt="call_to_call" />
+          <li
+            className={`${activeList === "Trunks" ? styles.activeItem : ""}`}
+            onClick={() => setActiveList("Trunks")}
+          >
+            <h4>Trunks</h4>
           </li>
-          <li>
-            <img src="/icons/sidebar/call_message.svg" alt="call_message" />
+          <li
+            className={`${
+              activeList === "Park Slots" ? styles.activeItem : ""
+            }`}
+            onClick={() => setActiveList("Park Slots")}
+          >
+            <h4>Park Slots</h4>
           </li>
-          <li>
-            <img src="/icons/sidebar/call_book.svg" alt="call_book" />
-          </li>
-          <li>
-            <img src="/icons/sidebar/visper.svg" alt="visper" />
-          </li>
-          <li>
-            <img src="/icons/sidebar/visber_talk.svg" alt="visber_talk" />
-          </li>
-          <li>
-            <img src="/icons/sidebar/phone_out.svg" alt="phone_out" />
-          </li>
-          <li>
-            <img src="/icons/sidebar/phone_in.svg" alt="phone_in" />
-          </li>{" "}
-          <li>
-            <img src="/icons/sidebar/record.svg" alt="record" />
+          <li
+            className={`${
+              activeList === "Conferences" ? styles.activeItem : ""
+            }`}
+            onClick={() => setActiveList("Conferences")}
+          >
+            <h4>Conferences</h4>
           </li>
         </ul>
       </div>
-      {children}
+      <div className={styles.content_holder}>
+        <div className={styles.titr}>
+          <h4>Extensions</h4>
+        </div>
+
+        {children}
+      </div>
+      <div className={styles.menu_holder}>
+        <div className={styles.menu_Items}>
+          <ul>
+            <li>
+              <img src="/icons/menu/dashboard.svg" alt="dashboard" />
+            </li>
+            <li>
+              <img src="/icons/menu/email.svg" alt="email" />
+            </li>
+            <li>
+              <img src="/icons/menu/setting.svg" alt="setting" />
+            </li>
+            <li>
+              <img src="/icons/menu/person.svg" alt="person" />
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }

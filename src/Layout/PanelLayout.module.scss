@@ -1,0 +1,117 @@
+.main {
+  display: flex;
+
+  margin-top: 23px;
+  position: relative;
+  .sidebar {
+    position: sticky;
+    top: 10px;
+    background-color: #1d1e3a;
+    width: 422px;
+    height: 100vh;
+    border-radius: 30px;
+    background: var(--gray1, #edf0f7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    ul {
+      margin-top: 19px;
+      padding-inline: 16px;
+      list-style: none;
+
+      display: flex;
+
+      li {
+        padding: 8px;
+        background: var(--background, #f9fafe);
+        color: var(--light-cold-lavender, #6d6ff6);
+
+        h4 {
+          text-align: center;
+          font-family: "Inter";
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        cursor: pointer;
+        &:first-child {
+          border-radius: 20px 0px 0px 20px;
+        }
+
+        &:last-child {
+          border-radius: 0px 20px 20px 0px;
+        }
+      }
+    }
+  }
+  .content_holder {
+    width: calc(100% - 442px);
+    margin-left: 23px;
+    border-radius: 30px;
+    background: var(--gray1, #edf0f7);
+    .titr {
+      border-radius: 20px;
+      background: var(--pure-cold-lavender, #494ad6);
+      margin-inline: 44px;
+      margin-top: 23px;
+      height: 31px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      h4 {
+        color: var(--white, #fff);
+        text-align: center;
+        font-family: "Inter";
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+      }
+    }
+  }
+  .menu_holder {
+    margin-left: 10px;
+    margin-right: 27px;
+    width: 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .menu_Items {
+      position: sticky;
+      bottom: 90px;
+      width: 56px;
+      height: 226px;
+      border-radius: 40px;
+      background: var(--white, #fff);
+      display: flex;
+      justify-content: center;
+      ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        li {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          &:first-child {
+            width: 47px;
+            height: 47px;
+            border-radius: 50%;
+            background-color: #6d6ff6;
+          }
+        }
+      }
+    }
+  }
+}
+.activeItem {
+  background: var(--pure-cold-lavender, #494ad6) !important;
+  color: #fff !important;
+}

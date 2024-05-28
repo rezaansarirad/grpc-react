@@ -68,6 +68,10 @@ function ListOfExtension({ extensionList, filteredData }) {
 
   return (
     <div className={styles.card}>
+      <div className={styles.search_holder}>
+        <img src="/icons/search.svg" alt="search" />
+        <input placeholder="Search User" />
+      </div>
       <ul>
         {updatedExtensionList.map((item) => {
           let itemClass = "";
